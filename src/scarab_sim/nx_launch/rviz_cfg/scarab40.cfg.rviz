@@ -348,7 +348,7 @@ Visualization Manager:
       Radius: 0.0299999993
       Shaft Diameter: 0.100000001
       Shaft Length: 0.100000001
-      Topic: /scarab40/path
+      Topic: /scarab40/trajectory
       Unreliable: false
       Value: true
     - Class: rviz/Marker

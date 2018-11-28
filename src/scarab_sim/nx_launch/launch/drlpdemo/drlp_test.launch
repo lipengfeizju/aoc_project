@@ -4,10 +4,11 @@
 
   <arg name="ns" default="scarab40" />
   <arg name="use_localization" default="true"/>
-  <arg name="use_scarab_loc" default="true" />
+  <arg name="use_scarab_loc" default="false" />
   <arg name="use_slam" default="true" />
   <arg name="use_move_base" default="true" />
   <arg name="use_teleop" default="false" />
+  <arg name="view_traj" default="true" />
   <arg name="world" default="fla_warehouse1"/>
   <arg name="px" default="0" />
   <arg name="py" default="0" />
@@ -41,14 +42,6 @@
       args="0.0 0.0 0.0 0.0 0.0 0.0 $(arg ns)/map $(arg ns)/odom 100"/>
     <!-- tf_prefix for laser odometry -->
     <arg name="tf_loc_pre"  default="estm"/>
-    <!-- Scarab localization -->
-    <group if="$(arg use_scarab_loc)">
-      <include file="$(find nx_launch)/launch/drlpdemo/drlp_localization.launch">
-        <arg name="ns" value="$(arg ns)"/>
-        <arg name="tf_prefix" value="$(arg tf_loc_pre)"/>
-        <arg name="odom_motor_topic" value="odom"/>
-      </include>
-    </group>  
     <!-- SLAM -->
     <group if="$(arg use_slam)">
       <include file="$(find nx_launch)/launch/drlpdemo/drlp_slam.launch">
@@ -64,13 +57,15 @@
         </include>
       </group>
     </group>
-
-   <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="hector_trajectory" output="screen">
-      <param name="target_frame_name" type="string" value="/map" />
-      <param name="source_frame_name" type="string" value="/scarab40/base_link" />
-      <param name="trajectory_update_rate" type="double" value="0.5" />
-      <param name="trajectory_publish_rate" type="double" value="0.25" />
-    </node>
+    <!-- Trjectory server -->
+    <group if="$(arg view_traj)" ns="$(arg ns)">
+      <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="hector_trajectory" output="screen">
+        <param name="target_frame_name" type="string" value="/map" />
+        <param name="source_frame_name" type="string" value="/scarab40/base_link" />
+        <param name="trajectory_update_rate" type="double" value="0.5" />
+        <param name="trajectory_publish_rate" type="double" value="0.25" />
+      </node>
+    </group>
   </group>
 
 
