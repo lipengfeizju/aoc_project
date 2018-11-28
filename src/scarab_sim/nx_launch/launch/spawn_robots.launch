@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <arg name="ns" default="scarab40" />
+  <arg name="px" default="0" />
+  <arg name="py" default="8.3" />
+  <arg name="pz" default="0" />
+  <arg name="pY" default="0" />
+  <arg name="pP" default="0" />   
+  <arg name="pR" default="0" />
+
+  <!-- launch scarab -->
+  <include file="$(find nx_launch)/launch/scarab/spawn_scarab.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="px" value="$(arg px)"/>
+    <arg name="py" value="$(arg py)"/>
+    <arg name="pz" value="$(arg pz)"/>
+    <arg name="pY" value="$(arg pY)"/>
+    <arg name="pP" value="$(arg pP)"/>
+    <arg name="pR" value="$(arg pR)"/>        
+  </include>  
+  <!-- launch turtlebot  -->
+  <!-- <include file="$(find nx_launch)/launch/turtlebot/spawn_turtlebot.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="px" value="$(arg px)"/>
+    <arg name="py" value="$(arg py)"/>
+    <arg name="pz" value="$(arg pz)"/>
+    <arg name="pY" value="$(arg pY)"/>
+    <arg name="pP" value="$(arg pP)"/>
+    <arg name="pR" value="$(arg pR)"/>        
+  </include> -->
+</launch>
+
+
+

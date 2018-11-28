@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>truncate_scan</name>
+  <version>0.0.0</version>
+  <description> Scan truncator </description>
+  <author>Kostas Karydis</author>
+  <maintainer email="kkarydis@seas.upenn.edu">Kostas Karydis</maintainer>
+  <author>Nikolay Atanasov</author>
+  <maintainer email="atanasov@seas.upenn.edu">Nikolay Atanasov</maintainer>
+  <license>GPLv3</license>
+  
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>sensor_msgs</depend>
+
+  <export>
+  </export>
+</package>

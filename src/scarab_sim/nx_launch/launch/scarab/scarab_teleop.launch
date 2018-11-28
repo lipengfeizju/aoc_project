@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <arg name="ns" default="scarab40"/>
+  <arg name="use_scarab_twist" default="false" />
+  
+  <group ns="$(arg ns)">
+    <group if="$(arg use_scarab_twist)">   
+      <node pkg="scarab_twist" type="key_to_twist" name="turtlebot_teleop_keyboard"  output="screen">
+        <param name="vspeed" value="0.6" type="double"/>
+        <param name="wspeed" value="1.0" type="double"/>
+        <remap from="cmd_vel" to="cmd_vel_mux/input/teleop"/>
+      </node>
+    </group>
+    <!-- teleop -->
+    <group unless="$(arg use_scarab_twist)"> 
+      <node pkg="turtlebot_teleop" type="turtlebot_teleop_key" name="turtlebot_teleop_keyboard"  output="screen">
+        <param name="scale_linear" value="0.5" type="double"/>
+        <param name="scale_angular" value="1.5" type="double"/>
+        <remap from="turtlebot_teleop_keyboard/cmd_vel" to="cmd_vel_mux/input/teleop"/>
+      </node>
+    </group>
+  </group>
+</launch>
+

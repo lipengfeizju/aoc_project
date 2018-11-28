@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <arg name="ns" default="scarab40" />
+  <arg name="model" default="towne_redchair" />
+  <arg name="cam_topic" default="/$(arg ns)/camera/rgb" />
+
+  <group ns="$(arg ns)">
+    <include file="$(find ffld_ros)/launch/object_detector_node.launch">
+      <arg name="model_path" value="$(find ffld_nx)/data/models/$(arg model).txt"/>
+      <arg name="cam_topic" value="$(arg cam_topic)/image_raw" />
+    </include>
+  </group>
+</launch>
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+
+<launch>
+  <!--arg name="left_caminfo_url" default="file://$(find fla_estimation_launch)/param/fla1_cam0_apr13.yaml"/>
+  <arg name="right_caminfo_url" default="file://$(find fla_estimation_launch)/param/fla1_cam1_apr13.yaml"/-->
+  <arg name="odom_topic" default="odom"/>
+  <arg name="goal_topic" default="goal"/>
+  <arg name="detection_mode" default="3" />
+  <arg name="consistency_tol" default="5.0" />
+  <arg name="starting_distance" default="12.0"/>
+  <arg name="debug" default="true"/>
+  <arg name="robot" default="$(env FLA_ROBOT_NAME)"/>
+
+  <group ns="$(arg robot)">
+  
+    <!-- start object detector service-->
+    <include file="$(find ffld_ros)/launch/detection_service.launch"/>
+    
+    <!-- start object detection client -->
+    <node name="fla_dpm_detector" pkg="ffld_ros" type="fla_dpm_detector" output="screen">
+      <param name="starting_distance" type="double" value="$(arg starting_distance)" />
+      <param name="debug" type="bool" value="$(arg debug)" />
+      <param name="detection_mode" type="int" value="$(arg detection_mode)" />
+      <param name="consistency_tol" type="double" value="$(arg consistency_tol)" />
+      <!--param name="cinfo_left_url" type="string" value="$(arg left_caminfo_url)" />
+	  <param name="cinfo_right_url" type="string" value="$(arg right_caminfo_url)" /-->
+      <rosparam file="$(find ffld_ros)/include/params/$(arg robot)_old_stereo.yaml"/>
+      <remap from="left/image_raw" to="sync/cam0/image_raw"/>
+      <remap from="right/image_raw" to="sync/cam1/image_raw"/>
+      <remap from="odom" to="$(arg odom_topic)"/>
+      <remap from="goal" to="$(arg goal_topic)"/>
+    </node>
+  
+  </group>
+  
+</launch>

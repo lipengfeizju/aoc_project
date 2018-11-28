@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- start object detector
+  <include file="$(find ffld_ros)/launch/object_detector_srv.launch">
+    <arg name="model_path" value="$(find ffld_nx)/data/models/polaris.txt"/>      
+  </include>
+  -->
+  <include file="$(find ffld_ros)/launch/detection_service.launch"/>
+  
+  <!-- send it an image -->
+  <node name="object_detector_client" pkg="ffld_ros" type="detect_object_client"
+        output="screen" args="$(find ffld_nx)/data/images/polaris_testset/frame0797.jpg"/>
+
+</launch>
+

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <arg name="ns" default="scarab40" />
+  <arg name="px" default="0" />
+  <arg name="py" default="0" />
+  <arg name="pz" default="0" />
+  <arg name="pY" default="0" />
+  <arg name="pP" default="0" />
+  <arg name="pR" default="0" />
+  <arg name="model" default="$(find nx_robot_description)/urdf/scarab.xacro"/>
+  <arg name="use_laser_odom" default="false" />
+  
+  <param name="robot_description" command="
+    $(find xacro)/xacro.py '$(arg model)'
+    robot_name:=$(arg ns)"
+  />
+
+  <!--
+  <param name="robot_description"
+         command="$(find xacro)/xacro.py '$(find nx_robot_description)/urdf/scarab.xacro'" />
+  -->
+  <node pkg="tf" type="static_transform_publisher" name="transformer"
+        args="$(arg px) $(arg py) $(arg pz) $(arg pY) $(arg pP) $(arg pR) map $(arg ns)/map 100"/>
+
+  <group ns="$(arg ns)">
+    <param name="tf_prefix" value="$(arg ns)" />
+    <!-- TOPICS PUBLISHED:
+      /camera/depth/camera_info
+      /camera/depth/image_raw
+      /camera/depth/points
+      /camera/parameter_descriptions
+      /camera/parameter_updates
+      /camera/rgb/camera_info
+      /camera/rgb/image_raw
+      /camera/rgb/image_raw/compressed
+      /camera/rgb/image_raw/compressed/parameter_descriptions
+      /camera/rgb/image_raw/compressed/parameter_updates
+      /camera/rgb/image_raw/compressedDepth
+      /camera/rgb/image_raw/compressedDepth/parameter_descriptions
+      /camera/rgb/image_raw/compressedDepth/parameter_updates
+      /camera/rgb/image_raw/theora
+      /camera/rgb/image_raw/theora/parameter_descriptions
+      /camera/rgb/image_raw/theora/parameter_updates
+      /joint_states
+      /mobile_base/commands/motor_power
+      /mobile_base/commands/reset_odometry
+      /mobile_base/commands/velocity
+      /mobile_base/events/bumper
+      /mobile_base/events/cliff
+      /mobile_base/sensors/imu_data
+      /odom
+      /scan
+      /tf
+    -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+            output="screen"
+            args="-urdf -model $(arg ns) -namespace $(arg ns) -param /robot_description -x $(arg px) -y $(arg py) -z $(arg pz) -Y $(arg pY) -R $(arg pR) -P $(arg pP)"/>
+
+    <!-- Velocity muxer -->
+    <!-- TOPICS PUBLISHED:
+      /cmd_vel_mux/active
+      /cmd_vel_mux/input/navi
+      /cmd_vel_mux/input/safety_controller
+      /cmd_vel_mux/input/teleop
+      /cmd_vel_mux/parameter_descriptions
+      /cmd_vel_mux/parameter_updates
+      /mobile_base_nodelet_manager/bond
+    -->
+    <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
+          args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+      <param name="yaml_cfg_file" value="$(find nx_robot_description)/param/mux.yaml" />
+      <remap from="cmd_vel_mux/output" to="mobile_base/commands/velocity"/>
+    </node>
+
+    <!-- state publisher -->
+    <node name="state_publisher" type="robot_state_publisher"
+          pkg="robot_state_publisher" output="screen" >
+      <param name="publish_frequency" type="double" value="30.0" />
+      <!--<param name="whitelist" value="base,camera,laser,hokuyo" /> -->
+    </node>
+
+    <!-- laser odometry -->
+    <group if="$(arg use_laser_odom)">
+      <node name="laser_odom" pkg="laser_odom" type="laser_odom"
+            output="screen" >
+        <param name="debug" value="false" />
+        <param name="use_motor_odom" value="false" />
+        <param name="base_frame" value="/$(arg ns)/base_footprint" />
+        <param name="laser_frame" value="/$(arg ns)/laser" />
+        <param name="laser_base_frame" value="/$(arg ns)/base_footprint" />
+        <param name="odom_frame" value="/$(arg ns)/odom" />
+      </node>
+    </group>
+
+  </group>
+</launch>
+
+
+
+

@@ -1,0 +1,30 @@
+<launch>
+  <arg name="ns" default="scarab03" />
+
+  <include file="$(find nx_launch)/launch/spawn_world.launch">
+    <arg name="world" value="doors_chairs"/>
+  </include>
+  <include file="$(find nx_launch)/launch/spawn_robots.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+  <include file="$(find nx_launch)/launch/scarab/scarab_teleop.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+  <include file="$(find nx_launch)/launch/scarab/scarab_slam.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+  <include file="$(find nx_launch)/launch/scarab/scarab_object_detection.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="model" value="towne_redchair"/>
+  </include>
+  <include file="$(find phd_conversion)/launch/detection_bearing.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="sensor_frame_id" value="scarab03/camera/rgb/image_raw"/>
+  </include>
+  <include file="$(find nx_launch)/launch/scarab/scarab_phd_filter.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+  <node pkg="rviz" type="rviz" name="rviz"
+    args="-d $(find nx_launch)/rviz_cfg/turtlebot.cfg.rviz"/>
+</launch>
+

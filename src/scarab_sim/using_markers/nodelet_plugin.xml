@@ -1,0 +1,28 @@
+<library path="lib/libmarker_visualization">
+  <class name="using_markers/PoseVisualization" type="PoseVisualization" base_class_type="nodelet::Nodelet">
+    <description>
+      Pose visualization.
+    </description>
+  </class>
+  <class name="using_markers/LineVisualization" type="LineVisualization" base_class_type="nodelet::Nodelet">
+    <description>
+      Line visualization.
+    </description>
+  </class>
+  <class name="using_markers/VelVisualization" type="VelVisualization" base_class_type="nodelet::Nodelet">
+    <description>
+      Velocity visualization.
+    </description>
+  </class>
+  <class name="using_markers/CovarVisualization" type="CovarVisualization" base_class_type="nodelet::Nodelet">
+    <description>
+      Covariance visualization.
+    </description>
+  </class>
+  <class name="using_markers/CmdVisualization" type="CmdVisualization" base_class_type="nodelet::Nodelet">
+    <description>
+      Position cmd visualization.
+    </description>
+  </class>
+</library>
+

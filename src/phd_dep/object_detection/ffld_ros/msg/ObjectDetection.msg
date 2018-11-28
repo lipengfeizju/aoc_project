@@ -1,0 +1,6 @@
+Header header
+float64[] score
+uint16[] left
+uint16[] top
+uint16[] right
+uint16[] bottom

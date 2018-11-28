@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+
+<launch>
+  <!--arg name="model_path"   default="$(find ffld_nx)/data/models/polaris_noparts.txt"/-->
+  
+  <node name="dpm_detect_service" pkg="ffld_ros" type="dpm_detect_service"
+        output="screen">
+    <param name="model_path" value="$(find ffld_nx)/data/models/"/>
+    <rosparam file="$(find ffld_ros)/include/models.yaml"/>
+    <!--param name="model_name" value="$(arg model_path)"/--> 
+  </node>
+</launch>
+

@@ -1,0 +1,8 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~rate" : \b [double] Maximum run rate for this node. -1 means no limit. min: -1.0, default: 0.5, max: 30.0
+- \b "~resize_val" : \b [double] Scales the width and height of the image by resize_val. min: 0.25, default: 1.0, max: 1.0
+- \b "~interval" : \b [double] Number of scales in the image pyramid. min: 1.0, default: 5.0, max: 10.0
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+	<arg name="world" default="doors_chairs"/>
+	<arg name="ns" default="scarab03"/>
+    
+  <!-- world -->
+  <include file="$(find nx_launch)/launch/spawn_world.launch">
+       <arg name="world" value="$(arg world)"/>
+  </include>
+  <!-- robot -->
+  <include file="$(find nx_launch)/launch/spawn_robots.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+  <!-- tele_op -->
+  <!--<include file="$(find nx_launch)/launch/scarab/scarab_teleop.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>-->
+
+  <!-- detection -->
+  <include file="$(find nx_launch)/launch/scarab/scarab_object_detection.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+
+  <!-- SLAM -->
+  <include file="$(find nx_launch)/launch/scarab/scarab_slam.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+  <!-- PHD_filter -->
+  <include file="$(find nx_launch)/launch/scarab/scarab_phd_filter.launch">
+    <arg name="ns" value="$(arg ns)"/>
+  </include>
+
+
+   <!-- start rivz -->
+   <node pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find nx_launch)/rviz_cfg/phd_trtl.cfg.rviz"/>
+
+</launch>

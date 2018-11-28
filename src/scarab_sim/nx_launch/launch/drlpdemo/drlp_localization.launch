@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <arg name="ns" default="scarab40" />
+  
+  <!-- tf_prefix for robot state publisher --> 
+  <arg name="tf_prefix"  default="estm"/>
+
+  <arg name="scan_topic"  default="scan" />
+  <arg name="odom_motor_topic"  default="odom_motor" />
+  <arg name="odom_laser_topic"  default="odom" />
+  <arg name="base_frame"  default="base_footprint"/>
+  <arg name="laser_frame"  default="laser"/>
+  <arg name="odom_laser_frame"  default="odom"/>
+  
+  
+  <!-- publishes tf from odom_laser_frame to base_frame -->  
+  <node name="$(arg ns)_laser_odom" pkg="laser_odom" type="laser_odom" output="screen" >
+    <param name="debug" value="false" />
+    <param name="base_frame" value="$(arg ns)/$(arg tf_prefix)/$(arg base_frame)" />
+    <param name="laser_base_frame" value="(arg ns)/$(arg tf_prefix)/$(arg base_frame)" />
+    <param name="laser_frame" value="(arg ns)/$(arg tf_prefix)/$(arg laser_frame)" />
+    <param name="odom_frame" value="$(arg ns)/$(arg tf_prefix)/$(arg odom_laser_frame)" />
+    
+    <!-- take in scan and motor odometry -->
+    <remap from="scan" to="$(arg ns)/$(arg scan_topic)"/>
+    <remap from="odom_motor" to="$(arg ns)/$(arg odom_motor_topic)"/>
+    <remap from="laser_cloud" to="$(arg ns)/laser_cloud"/>
+    <!-- publish estimated odometry -->
+    <remap from="odom_laser" to="$(arg ns)/$(arg tf_prefix)/$(arg odom_laser_topic)"/>
+    <rosparam>
+      grid_resolution: 0.05
+      sensor_sd: 0.02
+      subsample: 1
+      travel_distance: 0.2
+      travel_angle: 0.034
+      decay_duration: 200
+      decay_step: 40
+      range_x: 0.2
+      range_y: 0.2
+    </rosparam>
+  </node>
+
+  <!-- group is needed to remap the topic names -->
+  <!--<group ns="$(arg ns)/$(arg tf_prefix)"> -->
+    <!-- state publisher for estimated robot state ! -->
+    <node name="state_publisher" type="robot_state_publisher"
+        pkg="robot_state_publisher" output="screen" >
+        <param name="robot_description" command="$(find xacro)/xacro.py '$(find nx_robot_description)/urdf/scarab.xacro' robot_name:=$(arg ns)/$(arg tf_prefix)" />
+      <param name="tf_prefix" value="$(arg ns)/$(arg tf_prefix)"/>
+      <!-- recent bug in tf: cannot use static tf topics from state_publisher -->
+      <param name="use_tf_static" value="false"/>
+      <!-- take in the true joint states from gazebo -->
+      <remap from="joint_states" to="/$(arg ns)/joint_states" />
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="whitelist" value="" />
+    </node>
+  <!--</group>-->
+</launch>
+
+

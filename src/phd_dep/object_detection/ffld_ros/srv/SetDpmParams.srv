@@ -1,0 +1,9 @@
+bool set_vals
+uint8 model_num
+float32 overlap
+float32 threshold
+uint8 interval
+uint8 padding
+float32 resize_val
+---
+bool success

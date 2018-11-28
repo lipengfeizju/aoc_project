@@ -1,0 +1,9 @@
+\subsubsection usage Usage
+\verbatim
+<node name="ffld_ros" pkg="ffld_ros" type="ffld_ros">
+  <param name="rate" type="double" value="0.5" />
+  <param name="resize_val" type="double" value="1.0" />
+  <param name="interval" type="double" value="5.0" />
+</node>
+\endverbatim
+
