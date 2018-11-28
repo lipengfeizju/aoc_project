@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <!-- roslaunch nx_launch drlp_demo.launch world:=fla_warehouse1 use_localization:=true use_scarab_loc:=false use_slam:=true use_move_base:=false use_hfn:=false use_teleop:=true px:=0.0 py:=0.0 pY:=0.0 -->
+
+  <arg name="ns" default="scarab40" />
+  <arg name="use_localization" default="true"/>
+  <arg name="use_scarab_loc" default="true" />
+  <arg name="use_slam" default="true" />
+  <arg name="use_move_base" default="true" />
+  <arg name="use_teleop" default="false" />
+  <arg name="world" default="fla_warehouse1"/>
+  <arg name="px" default="0" />
+  <arg name="py" default="0" />
+  <arg name="pY" default="0" />
+
+  <!-- world -->
+  <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
+    <arg name="world" value="$(arg world)"/>
+  </include>
+
+  <!-- robot -->
+  <include file="$(find nx_launch)/launch/drlpdemo/spawn_scarab_drlp.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="px" value="$(arg px)"/>
+    <arg name="py" value="$(arg py)"/>
+    <arg name="pY" value="$(arg pY)"/>
+  </include>
+
+  <!-- Truncate Laser Scan -->
+  <group ns="$(arg ns)">
+    <node pkg="truncate_scan" type="truncate_scan" name="truncate_scan1" output="screen">
+      <remap from="~scan_in" to="scan"/>
+      <remap from="~scan_out" to="scan_trunc"/>
+    </node>
+  </group>
+
+  <!-- Localization -->
+  <group if="$(arg use_localization)">
+    <!-- Ground Truth odometry -->
+    <node pkg="tf" type="static_transform_publisher" name="map_to_odom"
+      args="0.0 0.0 0.0 0.0 0.0 0.0 $(arg ns)/map $(arg ns)/odom 100"/>
+    <!-- tf_prefix for laser odometry -->
+    <arg name="tf_loc_pre"  default="estm"/>
+    <!-- Scarab localization -->
+    <group if="$(arg use_scarab_loc)">
+      <include file="$(find nx_launch)/launch/drlpdemo/drlp_localization.launch">
+        <arg name="ns" value="$(arg ns)"/>
+        <arg name="tf_prefix" value="$(arg tf_loc_pre)"/>
+        <arg name="odom_motor_topic" value="odom"/>
+      </include>
+    </group>  
+    <!-- SLAM -->
+    <group if="$(arg use_slam)">
+      <include file="$(find nx_launch)/launch/drlpdemo/drlp_slam.launch">
+        <arg name="ns" value="$(arg ns)"/>
+        <arg name="odom_frame"  value="$(arg tf_loc_pre)/odom"/>
+        <arg name="scan_topic"  value="scan_trunc" />
+      </include>
+      <!-- MOVE_BASE -->
+      <group if="$(arg use_move_base)" ns="$(arg ns)">
+        <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
+          <arg name="odom_frame_id"  value="$(arg tf_loc_pre)/odom" />
+          <arg name="odom_topic" default="$(arg tf_loc_pre)/odom" />
+        </include>
+      </group>
+    </group>
+  </group>
+
+
+  <!-- Teleop -->
+  <group if="$(arg use_teleop)">
+    <include file="$(find nx_launch)/launch/drlpdemo/drlp_teleop.launch">
+      <arg name="ns" value="$(arg ns)"/>
+    </include>
+  </group>
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find nx_launch)/rviz_cfg/scarab40.cfg.rviz"/>
+
+  <!--  python dl_action.py se2_model_withoutmap/pad_0_25_astar_withoutmap.h5 -use-lstm -->
+
+</launch>
+
+
