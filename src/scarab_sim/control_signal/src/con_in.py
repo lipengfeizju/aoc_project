@@ -1,26 +1,18 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Float32MultiArray
-from std_msgs.msg import MultiArrayDimension
+from control_signal.msg import Control
 
 def con_input():
     # Starts a new node
     rospy.init_node('con_in_node', anonymous=True)
     rate = rospy.Rate(10) # 10hz
-    con_in_pub = rospy.Publisher('/scarab40/con_in', Float32MultiArray, queue_size=10)
+    con_in_pub = rospy.Publisher('/scarab40/con_in', Control, queue_size=10)
     #Setting the current time for distance calculus
     # let's build a 3x3 matrix:
-    control_mat = Float32MultiArray()
-    control_mat.layout.dim.append(MultiArrayDimension())
-    control_mat.layout.dim.append(MultiArrayDimension())
-    control_mat.layout.dim[0].label = "height"
-    control_mat.layout.dim[1].label = "width"
-    control_mat.layout.dim[0].size = 2
-    control_mat.layout.dim[1].size = 1
-    control_mat.layout.dim[0].stride = 2
-    control_mat.layout.dim[1].stride = 1
-    control_mat.layout.data_offset = 0
-    control_mat.data = [0.0]*2
+    con_in = Control()
+    con_in.u_a = 0
+    con_in.u_delta = 0
+
    
     while not rospy.is_shutdown():
         t0 = rospy.Time.now().to_sec()
@@ -28,16 +20,16 @@ def con_input():
         while (t1-t0 < 20): 
             if  t1-t0 > 3:
                 #rospy.loginfo("t:%f\n",t1 - t0)
-                con_in_pub.publish(control_mat)
+                con_in_pub.publish(con_in)
                 if t1 - t0 < 4:
-                    control_mat.data[0] = 1
-                    control_mat.data[1] = -0.5                    
+                    con_in.u_a = 1
+                    con_in.u_delta = -0.5                    
                 elif t1 - t0 < 5:
-                    control_mat.data[0] = -1
-                    control_mat.data[1] = 0.5
+                    con_in.u_a = -1
+                    con_in.u_delta = 0.5 
                 else:
-                    control_mat.data[0] = 0
-                    control_mat.data[1] = 0
+                    con_in.u_a = 0
+                    con_in.u_delta = 0
             t1=rospy.Time.now().to_sec()
             rate.sleep()
         rate.sleep()
