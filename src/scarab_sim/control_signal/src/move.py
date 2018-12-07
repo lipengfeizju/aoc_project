@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from geometry_msgs.msg import Twist
+import tf2_ros
 
 def move():
     # Starts a new node
@@ -8,6 +9,8 @@ def move():
     rate = rospy.Rate(30) # 30hz
     velocity_publisher = rospy.Publisher('/scarab40/cmd_vel_mux/input/navi', Twist, queue_size=10)
     vel_msg = Twist()
+    tfBuffer = tf2_ros.Buffer()
+    listener = tf2_ros.TransformListener(tfBuffer)
     
     #Receiveing the user's input
     print("Let's move your robot")
@@ -46,6 +49,7 @@ def move():
         vel_msg.linear.x = 0
         #Force the robot to stop
         velocity_publisher.publish(vel_msg)
+	rate.sleep()
 
 if __name__ == '__main__':
     try:

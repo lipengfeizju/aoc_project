@@ -15,17 +15,17 @@
   <arg name="pY" default="0" />
 
   <!-- world -->
-  <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
+  <!-- <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
     <arg name="world" value="$(arg world)"/>
-  </include>
+  </include> -->
 
   <!-- robot -->
-  <include file="$(find nx_launch)/launch/drlpdemo/spawn_scarab_drlp.launch">
+  <!-- <include file="$(find nx_launch)/launch/drlpdemo/spawn_scarab_drlp.launch">
     <arg name="ns" value="$(arg ns)"/>
     <arg name="px" value="$(arg px)"/>
     <arg name="py" value="$(arg py)"/>
     <arg name="pY" value="$(arg pY)"/>
-  </include>
+  </include> -->
 
   <!-- Truncate Laser Scan -->
   <group ns="$(arg ns)">
@@ -82,7 +82,7 @@
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz"
-        args="-d $(find nx_launch)/rviz_cfg/scarab40.cfg.rviz"/>
+        args="-d $(find nx_launch)/rviz_cfg/aoc_project.cfg.rviz"/>
 
   <!--  python dl_action.py se2_model_withoutmap/pad_0_25_astar_withoutmap.h5 -use-lstm -->
 

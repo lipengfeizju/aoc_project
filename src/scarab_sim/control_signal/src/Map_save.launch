@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <arg name="ns" default="scarab40" />
+  <!-- Truncate Laser Scan -->
+  <group ns="$(arg ns)">
+    <node pkg="map_server" type="map_saver" name="map_saver_1" output="screen" args="-f /home/lipengfei/Pictures/mymap">
+    </node>
+  </group>
+</launch>
