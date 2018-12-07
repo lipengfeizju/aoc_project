@@ -25,21 +25,22 @@ def con_input():
     while not rospy.is_shutdown():
         t0 = rospy.Time.now().to_sec()
         t1 = t0
-        while (t1-t0 < 9):  
-            #rospy.loginfo("t:%f\n",t1 - t0)
-            con_in_pub.publish(control_mat)
-            if t1 - t0 < 1:
-                control_mat.data[0] = 1
-                control_mat.data[1] = 0.1
-                t1=rospy.Time.now().to_sec()
-            elif t1 - t0 < 2:
-                control_mat.data[0] = -1
-                control_mat.data[1] = -0.1
-                t1=rospy.Time.now().to_sec()
-            else:
-                control_mat.data[0] = 0
-                t1=rospy.Time.now().to_sec()
+        while (t1-t0 < 20): 
+            if  t1-t0 > 3:
+                #rospy.loginfo("t:%f\n",t1 - t0)
+                con_in_pub.publish(control_mat)
+                if t1 - t0 < 4:
+                    control_mat.data[0] = 1
+                    control_mat.data[1] = -0.5                    
+                elif t1 - t0 < 5:
+                    control_mat.data[0] = -1
+                    control_mat.data[1] = 0.5
+                else:
+                    control_mat.data[0] = 0
+                    control_mat.data[1] = 0
+            t1=rospy.Time.now().to_sec()
             rate.sleep()
+        rate.sleep()
             
 if __name__ == '__main__':
     try:
