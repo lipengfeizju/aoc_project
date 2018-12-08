@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <!-- roslaunch nx_launch drlp_demo.launch world:=fla_warehouse1 use_localization:=true use_scarab_loc:=false use_slam:=true use_move_base:=false use_hfn:=false use_teleop:=true px:=0.0 py:=0.0 pY:=0.0 -->
+
+  <arg name="ns" default="scarab40" />
+  <arg name="use_localization" default="true"/>
+  <arg name="use_scarab_loc" default="false" />
+  <arg name="use_slam" default="true" />
+  <arg name="use_move_base" default="true" />
+  <arg name="use_teleop" default="false" />
+  <arg name="view_traj" default="true" />
+  <arg name="world" default="fla_warehouse1"/>
+  <arg name="px" default="0.0" />
+  <arg name="py" default="0.0" />
+  <arg name="yaw" default="0.0" />
+  <arg name="laser_enabled" default="true"/>
+  <arg name="kinect_enabled" default="false"/>
+
+
+  <!-- world -->
+  <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
+    <arg name="world" value="$(arg world)"/>
+  </include>
+
+  <!-- robot -->
+
+  <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
+    <arg name="laser_enabled" value="$(arg laser_enabled)"/>
+    <arg name="kinect_enabled" value="$(arg kinect_enabled)"/>
+    <arg name="robot_namespace" value="$(arg ns)"/>
+    <arg name="x" value="$(arg px)"/>
+    <arg name="y" value="$(arg py)"/>
+    <arg name="yaw" value="$(arg yaw)"/>
+  </include>
+
+
+  <!-- <include file="$(find nx_launch)/launch/drlpdemo/spawn_scarab_drlp.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="px" value="$(arg px)"/>
+    <arg name="py" value="$(arg py)"/>
+    <arg name="pY" value="$(arg pY)"/>
+  </include> -->
+  
+</launch>

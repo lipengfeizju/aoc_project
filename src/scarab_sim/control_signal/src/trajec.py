@@ -17,7 +17,7 @@ rate = rospy.Rate(3) # 40hz
 marker = Marker()
 marker.header.frame_id = "/desired_trajec"
 #marker.type = marker.SPHERE
-marker.type = marker.LINE_STRIP
+marker.type = marker.LINE_LIST
 marker.action = marker.ADD
 marker.scale.x = 0.2
 marker.scale.y = 0.2
@@ -39,16 +39,28 @@ for i in range(7):
     p1.y = 0
     p1.z = 0
     marker.points.append(p1)
-for i in range(2):
+for i in range(3):
     p1 = Point()
     p1.x = 6
-    p1.y = -(i+1)/2
+    p1.y = -(i+1.0)/2
     p1.z = 0
     marker.points.append(p1)
-for i in range(14):
+for i in range(15):
     p1 = Point()
     p1.x = 7+i
     p1.y = -1.5
+    p1.z = 0
+    marker.points.append(p1)
+for i in range(13):
+    p1 = Point()
+    p1.x = 21
+    p1.y = -i/2.0 - 2
+    p1.z = 0
+    marker.points.append(p1)
+for i in range(18):
+    p1 = Point()
+    p1.x = 22 + i
+    p1.y = -8
     p1.z = 0
     marker.points.append(p1)
 

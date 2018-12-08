@@ -50,12 +50,12 @@
         <arg name="scan_topic"  value="scan_trunc" />
       </include>
       <!-- MOVE_BASE -->
-      <group if="$(arg use_move_base)" ns="$(arg ns)">
+      <!-- <group if="$(arg use_move_base)" ns="$(arg ns)">
         <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
           <arg name="odom_frame_id"  value="$(arg tf_loc_pre)/odom" />
           <arg name="odom_topic" default="$(arg tf_loc_pre)/odom" />
         </include>
-      </group>
+      </group> -->
     </group>
     <!-- Trjectory server -->
     <group if="$(arg view_traj)" ns="$(arg ns)">

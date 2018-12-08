@@ -1,4 +1,5 @@
-string first_name
-string last_name
-uint8 age
-uint32 score
+# State vector
+
+float32  delta              # turning angle of the car
+float32  v          # velocity of the car
+

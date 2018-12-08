@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+    <arg name="ns" default="scarab40" />
+
+    <group ns="$(arg ns)">
+        <node pkg="control_signal" type="con_in.py" name="control_node" output="screen">
+        </node>
+        <node pkg="control_signal" type="car_model.py" name="car_dynamic" output="screen">
+            <remap from="cmd_output" to="cmd_vel_mux/input/navi"/>
+        </node>
+        <node pkg="rqt_plot" type="rqt_plot" name="pos_vel_plot"
+            args="/scarab40/con_in/u_a:u_delta /scarab40/State/delta:v"/>
+    </group>
+
+</launch>

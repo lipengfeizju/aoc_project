@@ -5,28 +5,33 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import MultiArrayDimension
 from control_signal.msg import Control
+from control_signal.msg import State
 
 vel_msg = Twist()
-velocity_publisher = rospy.Publisher('/scarab40/cmd_vel_mux/input/navi', Twist, queue_size=10)
+velocity_publisher = rospy.Publisher('cmd_output', Twist, queue_size=10)
+state_publisher = rospy.Publisher('State', State, queue_size=10)
+
 # state vector
-delta = 0
-v = 0
-vel_msg.linear.x = v # velocity
-vel_msg.angular.z = v*math.tan(delta) # theta_dot
+S1 = State()
+S1.delta = 0
+S1.v = 0
+vel_msg.linear.x = S1.v # velocity
+vel_msg.angular.z = S1.v*math.tan(S1.delta) # theta_dot
 # constant values 
 vel_msg.linear.y = 0
 vel_msg.linear.z = 0
 vel_msg.angular.x = 0
 vel_msg.angular.y = 0
-topic_hz = 10
+topic_hz = 20
 
 def convert_con(con_in):
-    global vel_msg,v,delta,velocity_publisher
-    v = con_in.u_a/topic_hz + v
-    delta = con_in.u_delta/topic_hz + delta
-    vel_msg.linear.x = v
-    vel_msg.angular.z = v*math.tan(delta)
+    global vel_msg,S1,velocity_publisher
+    S1.v = con_in.u_a/topic_hz + S1.v
+    S1.delta = con_in.u_delta/topic_hz + S1.delta
+    vel_msg.linear.x = S1.v
+    vel_msg.angular.z = S1.v*math.tan(S1.delta)
     velocity_publisher.publish(vel_msg)
+    state_publisher.publish(S1)
     
 
 def control():
