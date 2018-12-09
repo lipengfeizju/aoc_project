@@ -5,7 +5,7 @@ import cPickle as pickle
 import numpy as np
 import os
 
-con_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/src/data.p')
+con_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/data.p')
 con_sig = pickle.load(con_file)
 
 def con_input():
@@ -30,13 +30,14 @@ def con_input():
             if t1 - t0 < 3:
                 con_in.u_a = 0
                 con_in.u_delta = 0 
-            elif t1 - t0 < 7:
-                con_in.u_a = con_sig[i][0]/4
-                con_in.u_delta = 0 
-                i = i + 1             
             else:
-                con_in.u_a = 0
-                con_in.u_delta = 0
+                if i < 50:
+                    con_in.u_a = con_sig[i][0]*5
+                    con_in.u_delta = con_sig[i][1]*5
+                    i = i + 1             
+                else:
+                    con_in.u_a = 0
+                    con_in.u_delta = 0
             t1=rospy.Time.now().to_sec()
             rate.sleep()
         rate.sleep()

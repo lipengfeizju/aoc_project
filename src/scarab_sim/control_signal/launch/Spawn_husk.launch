@@ -10,6 +10,7 @@
   <arg name="use_teleop" default="false" />
   <arg name="view_traj" default="true" />
   <arg name="world" default="fla_warehouse1"/>
+  <arg name="world_name" default="worlds/empty.world"/>
   <arg name="px" default="0.0" />
   <arg name="py" default="0.0" />
   <arg name="yaw" default="0.0" />
@@ -18,9 +19,19 @@
 
 
   <!-- world -->
-  <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
+  <!-- <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
     <arg name="world" value="$(arg world)"/>
+  </include> -->
+  <!-- empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_name)"/> <!-- world_name is wrt GAZEBO_RESOURCE_PATH environment variable -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
   </include>
+
 
   <!-- robot -->
 

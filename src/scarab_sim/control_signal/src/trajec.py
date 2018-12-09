@@ -12,7 +12,7 @@ publisher = rospy.Publisher(topic, Marker,queue_size=1)
 
 
 markerArray = MarkerArray()
-rate = rospy.Rate(3) # 40hz
+rate = rospy.Rate(1) # 1hz
 
 marker = Marker()
 marker.header.frame_id = "/desired_trajec"

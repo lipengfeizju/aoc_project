@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+  <!-- roslaunch nx_launch drlp_demo.launch world:=fla_warehouse1 use_localization:=true use_scarab_loc:=false use_slam:=true use_move_base:=false use_hfn:=false use_teleop:=true px:=0.0 py:=0.0 pY:=0.0 -->
+
+  <arg name="ns" default="scarab40" />
+  <arg name="use_localization" default="true"/>
+  <arg name="use_scarab_loc" default="false" />
+  <arg name="use_slam" default="true" />
+  <arg name="use_move_base" default="true" />
+  <arg name="use_teleop" default="false" />
+  <arg name="view_traj" default="true" />
+  <arg name="world" default="fla_warehouse1"/>
+  <arg name="px" default="0" />
+  <arg name="py" default="0" />
+  <arg name="pY" default="0" />
+
+  <!-- world -->
+  <!-- <include file="$(find nx_launch)/launch/drlpdemo/spawn_world_drlp.launch">
+    <arg name="world" value="$(arg world)"/>
+  </include> -->
+
+  <!-- robot -->
+  <!-- <include file="$(find nx_launch)/launch/drlpdemo/spawn_scarab_drlp.launch">
+    <arg name="ns" value="$(arg ns)"/>
+    <arg name="px" value="$(arg px)"/>
+    <arg name="py" value="$(arg py)"/>
+    <arg name="pY" value="$(arg pY)"/>
+  </include> -->
+
+  
+  <!-- Truncate Laser Scan -->
+  <group ns="$(arg ns)">
+    <node pkg="truncate_scan" type="truncate_scan" name="truncate_scan1" output="screen">
+      <remap from="~scan_in" to="scan"/>
+      <remap from="~scan_out" to="scan_trunc"/>
+    </node>
+  </group>
+
+  <!-- Localization -->
+  <group if="$(arg use_localization)">
+    <!-- Ground Truth odometry -->
+    <node pkg="tf" type="static_transform_publisher" name="map_to_odom"
+      args="0.0 0.0 0.0 0.0 0.0 0.0 $(arg ns)/map $(arg ns)/odom 100"/>
+    <!-- tf_prefix for laser odometry -->
+    <arg name="tf_loc_pre"  default="estm"/>
+    <!-- SLAM -->
+    <group if="$(arg use_slam)">
+      <include file="$(find nx_launch)/launch/drlpdemo/drlp_slam.launch">
+        <arg name="ns" value="$(arg ns)"/>
+        <arg name="odom_frame"  value="$(arg tf_loc_pre)/odom"/>
+        <arg name="scan_topic"  value="scan_trunc" />
+      </include>
+    </group>
+    <!-- Trjectory server -->
+    <group if="$(arg view_traj)" ns="$(arg ns)">
+      <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="hector_trajectory" output="screen">
+        <param name="target_frame_name" type="string" value="/map" />
+        <param name="source_frame_name" type="string" value="/scarab40/base_link" />
+        <param name="trajectory_update_rate" type="double" value="0.5" />
+        <param name="trajectory_publish_rate" type="double" value="0.25" />
+      </node>
+    </group>
+  </group>
+
+  <!-- tejectory -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_des"
+      args="0.0 0.0 0.0 0.0 0.0 0.0 /map /desired_trajec 10"/>
+
+  <node pkg="control_signal" type="trajec.py" name="trajec" output="screen"/>
+
+  <!-- Teleop -->
+  <group if="$(arg use_teleop)" ns="$(arg ns)">
+    <!-- teleop -->
+    <node pkg="turtlebot_teleop" type="turtlebot_teleop_key" name="turtlebot_teleop_keyboard"  output="screen">
+      <param name="scale_linear" value="0.5" type="double"/>
+      <param name="scale_angular" value="1.5" type="double"/>
+      <remap from="turtlebot_teleop_keyboard/cmd_vel" to="cmd_vel_mux/input/teleop"/>
+    </node>
+  </group>
+
+  <!-- rviz -->
+  <!-- <node pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find control_signal)/rviz/aoc_project.cfg.rviz"/> -->
+
+  <!--  python dl_action.py se2_model_withoutmap/pad_0_25_astar_withoutmap.h5 -use-lstm -->
+
+</launch>
+
+
