@@ -6,7 +6,7 @@ import tf2_ros
 def move():
     # Starts a new node
     rospy.init_node('robot_cleaner', anonymous=True)
-    rate = rospy.Rate(10) # 30hz
+    rate = rospy.Rate(20) # 30hz
     velocity_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
     tfBuffer = tf2_ros.Buffer()
@@ -37,11 +37,11 @@ def move():
                 vel_msg.linear.x = 0
                 vel_msg.angular.z = 0
             else:
-                if i < 30:
+                if i < 150:
                     vel_msg.linear.x = i/20
                     vel_msg.angular.z = 0.00*(i/10)
-                elif i < 60:   
-                    vel_msg.linear.x = (60 - i)/20
+                elif i < 300:   
+                    vel_msg.linear.x = (300 - i)/20
                     vel_msg.angular.z = 0.00*(i)
                 else:
                     vel_msg.linear.x = 0
