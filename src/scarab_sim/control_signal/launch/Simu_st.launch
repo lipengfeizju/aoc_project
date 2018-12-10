@@ -28,12 +28,12 @@
   </include> -->
 
   <!-- Truncate Laser Scan -->
-  <group ns="$(arg ns)">
+  <!-- <group ns="$(arg ns)">
     <node pkg="truncate_scan" type="truncate_scan" name="truncate_scan1" output="screen">
       <remap from="~scan_in" to="scan"/>
       <remap from="~scan_out" to="scan_trunc"/>
     </node>
-  </group>
+  </group> -->
 
   <!-- Localization -->
   <group if="$(arg use_localization)">

@@ -16,4 +16,9 @@ rostopic echo -p /gazebo/model_states   > ~/gaz_car2.csv
 
 
 
+1. start gazebo: roslaunch control_signal Spawn_race.launch
+2. start rviz: roslaunch control_signal Simu_race.launch 
+3. roscd control_signal/src/
+4. start control: python move_racecar.py 
+
 
