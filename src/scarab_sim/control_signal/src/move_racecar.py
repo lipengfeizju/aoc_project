@@ -8,10 +8,10 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from ackermann_msgs.msg import AckermannDrive
 from std_msgs.msg import Header
 
-data_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/data_us.p','rb')
+data_file = open('/home/gary/Desktop/catkin_aoc/src/scarab_sim/control_signal/data_debug/data_us.p','rb')
 con_sig = pickle.load(data_file)
 data_file.close()
-data_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/data_xs.p','rb')
+data_file = open('/home/gary/Desktop/catkin_aoc/src/scarab_sim/control_signal/data_debug/data_xs.p','rb')
 state_sig = pickle.load(data_file)
 data_file.close()
 

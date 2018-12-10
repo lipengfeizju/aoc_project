@@ -71,7 +71,7 @@
   <!-- tejectory -->
   <node pkg="tf" type="static_transform_publisher" name="map_to_des"
       args="0.0 0.0 0.0 0.0 0.0 0.0 /map /desired_trajec 10"/>
-  <node pkg="control_signal" type="trajec.py" name="trajec" output="screen"/>
+  <node pkg="control_signal" type="trajec_smooth.py" name="trajec" output="screen"/>
 
   <!-- Teleop -->
   <group if="$(arg use_teleop)">
