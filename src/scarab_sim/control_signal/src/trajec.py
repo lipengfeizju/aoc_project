@@ -9,6 +9,12 @@ import math
 rospy.init_node('register')
 topic = 'visualization_marker'
 publisher = rospy.Publisher(topic, Marker,queue_size=1)
+import cPickle as pickle
+import numpy as np
+
+data_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/traject.pkl','rb')
+traject = pickle.load(data_file)
+data_file.close()
 
 
 markerArray = MarkerArray()
@@ -33,36 +39,13 @@ marker.pose.position.z = 0
 
 # We add the new marker to the MarkerArray, removing the oldest
 # marker from it when necessary
-for i in range(7):
+for i in range(50):
     p1 = Point()
-    p1.x = i
-    p1.y = 0
+    p1.x = traject[i,0]
+    p1.y = traject[i,1]
     p1.z = 0
     marker.points.append(p1)
-for i in range(3):
-    p1 = Point()
-    p1.x = 6
-    p1.y = -(i+1.0)/2
-    p1.z = 0
-    marker.points.append(p1)
-for i in range(15):
-    p1 = Point()
-    p1.x = 7+i
-    p1.y = -1.5
-    p1.z = 0
-    marker.points.append(p1)
-for i in range(13):
-    p1 = Point()
-    p1.x = 21
-    p1.y = -i/2.0 - 2
-    p1.z = 0
-    marker.points.append(p1)
-for i in range(18):
-    p1 = Point()
-    p1.x = 22 + i
-    p1.y = -8
-    p1.z = 0
-    marker.points.append(p1)
+
 
 while not rospy.is_shutdown():   
     # Publish the Marker
