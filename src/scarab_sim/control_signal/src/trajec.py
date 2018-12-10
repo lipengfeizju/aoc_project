@@ -39,7 +39,7 @@ marker.pose.position.z = 0
 
 # We add the new marker to the MarkerArray, removing the oldest
 # marker from it when necessary
-for i in range(50):
+for i in range(90):
     p1 = Point()
     p1.x = traject[i,0]
     p1.y = traject[i,1]
