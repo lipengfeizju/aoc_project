@@ -1,15 +1,12 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Status1
-        - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 202
+    Tree Height: 280
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -132,8 +129,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.124994062
-        Min Value: 0.124980211
+        Max Value: 0.125437304
+        Min Value: 0.124622539
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -192,6 +189,8 @@ Visualization Manager:
           Value: false
         chassis_inertia:
           Value: false
+        desired_trajec:
+          Value: true
         laser:
           Value: false
         left_front_wheel:
@@ -221,6 +220,8 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
+          desired_trajec:
+            {}
           odom:
             base_link:
               chassis:
@@ -244,6 +245,37 @@ Visualization Manager:
                   zed_camera_right_link:
                     {}
       Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.300000012
+      Head Length: 0.200000003
+      Length: 0.300000012
+      Line Style: Lines
+      Line Width: 0.0299999993
+      Name: Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.0299999993
+      Shaft Diameter: 0.100000001
+      Shaft Length: 0.100000001
+      Topic: /trajectory
+      Unreliable: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /visualization_marker
+      Name: Marker
+      Namespaces:
+        "": true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
