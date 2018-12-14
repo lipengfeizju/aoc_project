@@ -8,10 +8,12 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from ackermann_msgs.msg import AckermannDrive
 from std_msgs.msg import Header
 
-data_file = open('../data_debug/data_us_1.p','rb')
+#data_file = open('../data_debug/data_us.p','rb')
+data_file = open('../../../ddp_sim_car_model/scripts/data_us_f.p','rb')
 con_sig = pickle.load(data_file)
 data_file.close()
-data_file = open('../data_debug/data_xs_1.p','rb')
+#data_file = open('../data_debug/data_xs.p','rb')
+data_file = open('../../../ddp_sim_car_model/scripts/data_xs_f.p','rb')
 state_sig = pickle.load(data_file)
 data_file.close()
 
@@ -40,7 +42,7 @@ def con_input():
         t0 = rospy.Time.now().to_sec()
         t1 = t0
         i = 0
-        while (t1-t0 < 20): 
+        while (t1-t0 < 200): 
             #rospy.loginfo("t:%f\n",t1 - t0)
             con_in_pub.publish(drive_in)
             if t1 - t0 < 3:
