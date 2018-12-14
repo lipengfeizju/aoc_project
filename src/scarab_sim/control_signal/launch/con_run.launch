@@ -3,7 +3,7 @@
     <arg name="ns" default="scarab40" />
 
     <group ns="$(arg ns)">
-        <node pkg="control_signal" type="con_in.py" name="control_node" output="screen">
+        <node pkg="control_signal" type="con_in.py" name="control_node" output="screen" args=" $(find control_signal)/data_debug/data.p">
         </node>
         <node pkg="control_signal" type="car_model.py" name="car_dynamic" output="screen">
             <remap from="cmd_output" to="cmd_vel_mux/input/navi"/>

@@ -10,7 +10,7 @@
   <link name="chassis">
     <visual>
       <xacro:chassis_geometry/>
-      <material name="red" />
+      <material name="blue" />
     </visual>
   </link>
 

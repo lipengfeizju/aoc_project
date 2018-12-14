@@ -7,7 +7,7 @@
             args="0.0 0.0 0.0 0.0 0.0 0.0  /odom  /base_link 100"/>
     <node pkg="tf" type="static_transform_publisher" name="map_to_des"
       args="0.0 0.0 0.0 0.0 0.0 0.0 /map /desired_trajec 10"/>
-    <node pkg="control_signal" type="trajec.py" name="trajec" output="screen"/>
+    <node pkg="control_signal" type="trajec.py" name="trajec" output="screen" args=" $(find control_signal)/data_debug/traject.pkl"/>
     <!-- Trjectory server -->
     <group if="$(arg view_traj)" >
       <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="hector_trajectory" output="screen">

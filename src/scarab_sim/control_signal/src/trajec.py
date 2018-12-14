@@ -5,14 +5,19 @@ from geometry_msgs.msg import Point
 from visualization_msgs.msg import MarkerArray
 import rospy
 import math
+import sys
+import os
+import cPickle as pickle
+import numpy as np
 
 rospy.init_node('register')
 topic = 'visualization_marker'
 publisher = rospy.Publisher(topic, Marker,queue_size=1)
-import cPickle as pickle
-import numpy as np
 
-data_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/traject.pkl','rb')
+data_file = open(str(sys.argv[1]),'rb')
+# os.system("read -p 'Press Enter to continue...' var")
+# print 'Argument List:', 
+
 traject = pickle.load(data_file)
 data_file.close()
 

@@ -4,8 +4,10 @@ from control_signal.msg import Control
 import cPickle as pickle
 import numpy as np
 import os
+import sys
 
-con_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/data.p')
+#con_file = open('/home/lipengfei/workspace/aoc_project/src/scarab_sim/control_signal/data_debug/data.p')
+con_file = open(str(sys.argv[1]),'rb')
 con_sig = pickle.load(con_file)
 
 def con_input():
