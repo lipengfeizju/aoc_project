@@ -4,23 +4,40 @@ from lqr_cost import LQRCost
 import matplotlib.pyplot as plt
 import numpy as np
 import cPickle as pickle
+import math
 
 def main():
 	# np.set_printoptions(precision=3, suppress=True)	
 	dynamics = SimpleCarDynamics()
-
-	# Trajectory info
-	N = 50
-	tf = 2.5
+	N = 100
+	tf = 35.0
 	dt = tf/N
 	ts = np.arange(N+1)*dt
+	xt = np.zeros((101,5));
+	xd1 = pickle.load(open("../../scarab_sim/control_signal/data_debug/traject.pkl", "rb" ))
+	xt[:,0:2] = xd1
+	print(xt.shape)
+
+	us0 = np.zeros([N, dynamics.m])
+
+	# Trajectory info
+	# xt[0,2] = 0
+	# xt[0,3] = 1
+	# xt[0,4] = 0 
+	# for i in range(N):
+	# 	xt[i+1,2] = math.atan2(xt[i+1,1]-xt[i,1], xt[i+1,0] - xt[i+1,0])
+	# 	xt[i+1,3] = 1
+	# 	xt[i+1,4] =0
+
+	# xtt = np.zeros((51,5));
+	# xtt = xt[0::2]
+	# print(xtt.shape)
 
 	Q = dt*np.eye(dynamics.n)* 1000
-	Q[2,2] = 0
-	Q[3,3] = 0
-	Q[4,4] = 0
-
-	R = 0.01*dt*np.eye(dynamics.m)*100
+	Q[2,2] = 1
+	Q[3,3] = 1
+	Q[4,4] = 1
+	R = 0.01*dt*np.eye(dynamics.m)*100000
 	Qf = 1000*np.eye(dynamics.n)
 	Qf[-1,-1] = 1
 
@@ -44,20 +61,20 @@ def main():
 	# print(type(xt))
 	############################
 	## first trajectory
-	trject = np.zeros((5,51))
-	for i in range(17):
-	    trject[0][i] = i/4.0
-	    trject[1][i] = 0
+	# trject = np.zeros((5,51))
+	# for i in range(17):
+	#     trject[0][i] = i/4.0
+	#     trject[1][i] = 0
 
-	for i in range(6):
-	    trject[0][i+17] = 4
-	    trject[1][i+17] = -(i+1.0)/4
+	# for i in range(6):
+	#     trject[0][i+17] = 4
+	#     trject[1][i+17] = -(i+1.0)/4
 
-	for i in range(28):
-	    trject[0][i+23] = 4.25 + i/4.0
-	    trject[1][i+23] = -1.5
-	trject = np.transpose(trject)
-	xt = trject
+	# for i in range(28):
+	#     trject[0][i+23] = 4.25 + i/4.0
+	#     trject[1][i+23] = -1.5
+	# trject = np.transpose(trject)
+	# xt = trject
 
 	# xt = np.zeros([N+1,5])
 	# xk = np.linspace(0, 5, N+1, endpoint=False)
@@ -68,26 +85,25 @@ def main():
 	# 	xt[i,3] = 0.
 	# 	xt[i,4] = 0.
 
-	# print(xt, xt.shape)
 	xd = xt
-	print(xd.shape)
 	cost = LQRCost(N, Q, R, Qf, xd)
 	max_step = 10.0  # Allowed step for control
-	x0 = np.array([0., 0, 0, 0, 0])
-	us0 = np.zeros([N, dynamics.m])
+	x0 = np.array([0., 0., 0, 0, 0])
+
 
 
 	ddp = Ddp(dynamics, cost, us0, x0, dt, max_step)
 	# print(ddp.xs.shape)
 	V = ddp.V
-	for i in range(3000):
+	for i in range(1000):
 		ddp.iterate()
 		V = ddp.V
+		print(ddp.xs[:,0:2])
 		
-	# us_total = ddp.us
-	# xs_total = ddp.xs
-	# pickle.dump(us_total, open("data_us_1.p", "wb"))
-	# pickle.dump(xs_total, open("data_xs_1.p", "wb"))
+	us_total = ddp.us
+	xs_total = ddp.xs
+	pickle.dump(us_total, open("data_us_f.p", "wb"))
+	pickle.dump(xs_total, open("data_xs_f.p", "wb"))
 
 	#########################################################
 

@@ -6,7 +6,7 @@ class Armiho:
     def __init__(self):
         self.dV = [0, 0]
         self.sigma = 0.1
-        self.beta = 0.25
+        self.beta = 0.5
         self.alpha_min = 1e-10
         self.cVmin = 1e-10
         self.alpha_tol = 1e-2
